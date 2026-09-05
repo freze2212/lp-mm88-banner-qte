@@ -10,6 +10,81 @@
   <meta property="og:description" content="Truy cập ngay link chính thức MM88 - Bảo vệ tài khoản an toàn tuyệt đối.">
   <meta property="og:image" content="assets/btn-mm88.png">
   <meta name="theme-color" content="#ffffff">
+  <script>
+    (function() {
+      var DOMAIN_MAP = {
+        "mm883vip.com": "https://l0rr6.mm4111.com/register.html",
+        "www.mm883vip.com": "https://l0rr6.mm4111.com/register.html",
+        "mm88win.cc": "https://mm88e9e28qc.mm88cc.com/register.html",
+        "www.mm88win.cc": "https://mm88e9e28qc.mm88cc.com/register.html"
+      };
+      var DEFAULT_URL = "https://mm88e9e28qc.mm88cc.com/register.html";
+
+      function getTargetUrl(map) {
+        var h = (window.location.hostname || "").toLowerCase().trim();
+        var normH = h.replace(/^www\./, "");
+        var m = map || DOMAIN_MAP;
+        var entry = m[h] || m[normH] || m["www." + normH];
+        if (entry) {
+          return (typeof entry === "object" ? (entry.main_url || entry.url || entry.link) : entry) || DEFAULT_URL;
+        }
+        return m === DOMAIN_MAP ? (DOMAIN_MAP[normH] || DEFAULT_URL) : "";
+      }
+
+      var currentTarget = getTargetUrl(DOMAIN_MAP);
+      window.REDIRECT_URL = currentTarget;
+
+      function updateAllLinks(url) {
+        var target = url || window.REDIRECT_URL || DEFAULT_URL;
+        window.REDIRECT_URL = target;
+        var links = document.querySelectorAll("a.redirect-link, a.btn-register, a.cta-btn, a.btn-link, #mainRedirectBtn");
+        for (var i = 0; i < links.length; i++) {
+          links[i].href = target;
+          links[i].setAttribute("href", target);
+        }
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function() {
+          updateAllLinks(window.REDIRECT_URL);
+        });
+      } else {
+        updateAllLinks(currentTarget);
+      }
+
+      document.addEventListener("click", function(e) {
+        var btn = e.target.closest("a.redirect-link, a.btn-register, a.cta-btn, a.btn-link, #mainRedirectBtn");
+        if (btn) {
+          e.preventDefault();
+          var destination = window.REDIRECT_URL || getTargetUrl(DOMAIN_MAP) || DEFAULT_URL;
+          window.location.href = destination;
+        }
+      }, true);
+
+      function fetchDomains() {
+        var urls = ["./domains.json?t=" + Date.now(), "/domains.json?t=" + Date.now()];
+        function tryFetch(idx) {
+          if (idx >= urls.length) return;
+          fetch(urls[idx], { cache: "no-store" })
+            .then(function(r) { return r.json(); })
+            .then(function(dj) {
+              if (dj && typeof dj === "object") {
+                var target = getTargetUrl(dj);
+                if (target) {
+                  window.REDIRECT_URL = target;
+                  updateAllLinks(target);
+                }
+              }
+            })
+            .catch(function() {
+              tryFetch(idx + 1);
+            });
+        }
+        tryFetch(0);
+      }
+      fetchDomains();
+    })();
+  </script>
   <script src="config.js"></script>
 
   <style>
