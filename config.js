@@ -7,7 +7,7 @@ window.REDIRECT_URL = window.REDIRECT_URL || "";
     "mm88win.cc": "https://mm88e9e28qc.mm88cc.com/register.html",
     "www.mm88win.cc": "https://mm88e9e28qc.mm88cc.com/register.html"
   };
-  var DEFAULT_URL = "https://mm88e9e28qc.mm88cc.com/register.html";
+  var DEFAULT_URL = "#";
 
   function getTargetUrl(map) {
     var h = (window.location.hostname || "").toLowerCase().trim();
